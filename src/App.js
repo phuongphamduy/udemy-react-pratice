@@ -1,5 +1,13 @@
+import './App.scss';
+import Header from './components/Header';
+import TableUsers from './components/TableUsers';
 function App() {
-    return <h2>Hello my name is phuong</h2>;
+    return (
+        <div className="app-container">
+            <Header />
+            <TableUsers />
+        </div>
+    );
 }
 
 export default App;
