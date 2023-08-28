@@ -1,30 +1,22 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { useState } from 'react';
-import { postCreateUser } from '../services/UserService';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
-function ModelAddNew({ show, handleClose, AddListUser }) {
+function ModelEditUser({ show, handleClose, data }) {
     const [name, setName] = useState('');
     const [job, setJob] = useState('');
 
-    const handleSaveUser = async () => {
-        let res = await postCreateUser(name, job);
-
-        if (res && res.id) {
-            handleClose();
-            setName('');
-            setJob('');
-            toast.success('add user success');
-            AddListUser({ first_name: res.name, id: res.id });
+    useEffect(() => {
+        if (show) {
+            setName(data.first_name);
         }
-    };
+    }, [data]);
 
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Add new user</Modal.Title>
+                <Modal.Title>Edit a user</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div>
@@ -55,12 +47,10 @@ function ModelAddNew({ show, handleClose, AddListUser }) {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleSaveUser}>
-                    Save Changes
-                </Button>
+                <Button variant="primary">Confirm</Button>
             </Modal.Footer>
         </Modal>
     );
 }
 
-export default ModelAddNew;
+export default ModelEditUser;

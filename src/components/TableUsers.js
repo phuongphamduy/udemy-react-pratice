@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { fetchListUser } from '../services/UserService';
 import ReactPaginate from 'react-paginate';
+import ModelAddNew from './ModelAddUser';
+import ModelEditUser from './ModelEditUser';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [showModelAddUser, setShowModelAddUser] = useState(false);
+    const [showModelEditUser, setShowEditUser] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [dataUserEdit, setDataUserEdit] = useState({});
     useEffect(() => {
         getUsers(1);
     }, []);
@@ -25,8 +30,25 @@ function TableUsers() {
         getUsers(+event.selected + 1);
     };
 
+    const AddListUser = (user) => {
+        setListUsers([user, ...listUsers]);
+    };
+
+    const handleUpdateUser = (user) => {
+        setShowEditUser(true);
+        setDataUserEdit(user);
+    };
+
     return (
         <div>
+            <div className="my-3 d-flex justify-content-between align-items-center">
+                <span>
+                    <b>List Users:</b>
+                </span>
+                <button className="btn btn-success" onClick={() => setShowModelAddUser(true)}>
+                    Add user
+                </button>
+            </div>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -46,11 +68,23 @@ function TableUsers() {
                                     <td>{item.email}</td>
                                     <td>{item.first_name}</td>
                                     <td>{item.last_name}</td>
+                                    <td>
+                                        <button className="btn btn-warning me-3" onClick={() => handleUpdateUser(item)}>
+                                            Update
+                                        </button>
+                                        <button className="btn btn-danger">Delete</button>
+                                    </td>
                                 </tr>
                             );
                         })}
                 </tbody>
             </Table>
+            <ModelAddNew
+                show={showModelAddUser}
+                handleClose={() => setShowModelAddUser(false)}
+                AddListUser={AddListUser}
+            />
+            <ModelEditUser show={showModelEditUser} handleClose={() => setShowEditUser(false)} data={dataUserEdit} />
             <ReactPaginate
                 nextLabel="next >"
                 onPageChange={handlePageClick}
