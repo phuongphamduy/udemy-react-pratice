@@ -8,6 +8,8 @@ import _, { debounce } from 'lodash';
 import ModelDeleteConfirm from './ModelDeleteConfirm';
 import './TableUser.scss';
 import { CSVLink } from 'react-csv';
+import Papa from 'papaparse';
+import { toast } from 'react-toastify';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
@@ -24,6 +26,8 @@ function TableUsers() {
 
     const [sortBy, setSortBy] = useState('asc');
     const [sortField, setSortField] = useState('id');
+
+    const [exportResult, setExportResult] = useState([]);
     useEffect(() => {
         getUsers(1);
     }, []);
@@ -91,12 +95,62 @@ function TableUsers() {
         }
     }, 2000);
 
-    const csvData = [
-        ['firstname', 'lastname', 'email'],
-        ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
-        ['Raed', 'Labes', 'rl@smthing.co.com'],
-        ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
-    ];
+    const handleExportResult = (event, done) => {
+        let result = [];
+        result.push(['Id', 'Email', 'First name', 'Last name']);
+        listUsers.map((item, index) => {
+            let arr = [];
+            let values = Object.values(item);
+            for (let i = 0; i < values.length - 1; i++) {
+                arr[i] = values[i];
+            }
+            result.push(arr);
+        });
+        setExportResult(result);
+        done(true);
+    };
+
+    const handleImportFile = (e) => {
+        if (e.target && e.target.files[0]) {
+            let file = e.target.files[0];
+            if (file.type !== 'text/csv') {
+                toast.error('Only accept csv file');
+                return;
+            }
+
+            Papa.parse(file, {
+                complete: function (results) {
+                    let rawCsv = results.data;
+                    if (rawCsv.length > 0) {
+                        if (
+                            rawCsv[0][0] !== 'email' ||
+                            rawCsv[0][1] !== 'first_name' ||
+                            rawCsv[0][2] !== 'last_name' ||
+                            rawCsv[0].length !== 3
+                        ) {
+                            toast.error('Wrong format header');
+                        } else {
+                            let result = [];
+
+                            rawCsv.map((item, index) => {
+                                if (index > 0 && item.length === 3) {
+                                    let obj = {};
+                                    obj.email = item[0];
+                                    obj.first_name = item[1];
+                                    obj.last_name = item[2];
+                                    result.push(obj);
+                                }
+                            });
+                            setListUsers(result);
+                            console.log('finished:', results.data);
+                        }
+                    } else {
+                        toast.error('Don hanve data in files');
+                    }
+                },
+            });
+        }
+    };
 
     return (
         <div>
@@ -106,15 +160,21 @@ function TableUsers() {
                 </span>
                 <div>
                     <label htmlFor="inputFile" className="btn btn-warning">
-                        <i class="fa-solid fa-file-import"></i> Import
+                        <i className="fa-solid fa-file-import"></i> Import
                     </label>
-                    <input type="file" hidden id="inputFile" />
-                    <CSVLink filename={'users.csv'} className="btn btn-primary mx-2" data={csvData}>
-                        <i class="fa-solid fa-file-export"></i> Export
+                    <input type="file" hidden id="inputFile" onChange={handleImportFile} />
+                    <CSVLink
+                        filename={'users.csv'}
+                        className="btn btn-primary mx-2"
+                        data={exportResult}
+                        asyncOnClick={true}
+                        onClick={handleExportResult}
+                    >
+                        <i className="fa-solid fa-file-export"></i> Export
                     </CSVLink>
 
                     <button className="btn btn-success" onClick={() => setShowModelAddUser(true)}>
-                        <i class="fa-solid fa-circle-plus"></i> Add user
+                        <i className="fa-solid fa-circle-plus"></i> Add user
                     </button>
                 </div>
             </div>
