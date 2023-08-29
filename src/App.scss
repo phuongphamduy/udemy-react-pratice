@@ -3,3 +3,13 @@ body {
         color: red;
     }
 }
+
+.home-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    img,
+    h1 {
+        margin: auto;
+    }
+}
