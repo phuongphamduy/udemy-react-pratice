@@ -58,6 +58,13 @@ function TableUsers() {
         setDataUserDelete(user);
     };
 
+    const handleDeleteUserFromModal = (user) => {
+        let cloneListUsers = _.cloneDeep(listUsers);
+        let index = listUsers.findIndex((item) => item.id === user.id);
+        cloneListUsers.splice(index, 1);
+        setListUsers(cloneListUsers);
+    };
+
     return (
         <div>
             <div className="my-3 d-flex justify-content-between align-items-center">
@@ -115,6 +122,7 @@ function TableUsers() {
                 show={showModelConfirmDelete}
                 handleClose={() => setShowModelConfirmDelete(false)}
                 data={dataUserDelete}
+                handleDeleteUserFromModal={handleDeleteUserFromModal}
             />
             <ReactPaginate
                 nextLabel="next >"

@@ -1,8 +1,17 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { deleteUser } from '../services/UserService';
+import { toast } from 'react-toastify';
 
-function ModelDeleteConfirm({ show, handleClose, data }) {
-    const confirmDelete = () => {};
+function ModelDeleteConfirm({ show, handleClose, data, handleDeleteUserFromModal }) {
+    const confirmDelete = async () => {
+        let res = await deleteUser(data.id);
+        if (res && +res.statusCode === 204) {
+            toast.success('Delete user succeed');
+            handleClose();
+            handleDeleteUserFromModal(data);
+        }
+    };
 
     return (
         <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
