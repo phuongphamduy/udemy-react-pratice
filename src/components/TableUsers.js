@@ -4,6 +4,7 @@ import { fetchListUser } from '../services/UserService';
 import ReactPaginate from 'react-paginate';
 import ModelAddNew from './ModelAddUser';
 import ModelEditUser from './ModelEditUser';
+import _ from 'lodash';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
@@ -37,6 +38,13 @@ function TableUsers() {
     const handleUpdateUser = (user) => {
         setShowEditUser(true);
         setDataUserEdit(user);
+    };
+
+    const handleEditUserFromModal = (user) => {
+        let cloneListUsers = _.cloneDeep(listUsers);
+        let index = listUsers.findIndex((item) => item.id === user.id);
+        cloneListUsers[index].first_name = user.first_name;
+        setListUsers(cloneListUsers);
     };
 
     return (
@@ -84,7 +92,12 @@ function TableUsers() {
                 handleClose={() => setShowModelAddUser(false)}
                 AddListUser={AddListUser}
             />
-            <ModelEditUser show={showModelEditUser} handleClose={() => setShowEditUser(false)} data={dataUserEdit} />
+            <ModelEditUser
+                show={showModelEditUser}
+                handleClose={() => setShowEditUser(false)}
+                data={dataUserEdit}
+                handleEditUserFromModal={handleEditUserFromModal}
+            />
             <ReactPaginate
                 nextLabel="next >"
                 onPageChange={handlePageClick}
