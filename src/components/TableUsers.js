@@ -7,6 +7,7 @@ import ModelEditUser from './ModelEditUser';
 import _, { debounce } from 'lodash';
 import ModelDeleteConfirm from './ModelDeleteConfirm';
 import './TableUser.scss';
+import { CSVLink } from 'react-csv';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
@@ -90,15 +91,32 @@ function TableUsers() {
         }
     }, 2000);
 
+    const csvData = [
+        ['firstname', 'lastname', 'email'],
+        ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
+        ['Raed', 'Labes', 'rl@smthing.co.com'],
+        ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
+    ];
+
     return (
         <div>
             <div className="my-3 d-flex justify-content-between align-items-center">
                 <span>
                     <b>List Users:</b>
                 </span>
-                <button className="btn btn-success" onClick={() => setShowModelAddUser(true)}>
-                    Add user
-                </button>
+                <div>
+                    <label htmlFor="inputFile" className="btn btn-warning">
+                        <i class="fa-solid fa-file-import"></i> Import
+                    </label>
+                    <input type="file" hidden id="inputFile" />
+                    <CSVLink filename={'users.csv'} className="btn btn-primary mx-2" data={csvData}>
+                        <i class="fa-solid fa-file-export"></i> Export
+                    </CSVLink>
+
+                    <button className="btn btn-success" onClick={() => setShowModelAddUser(true)}>
+                        <i class="fa-solid fa-circle-plus"></i> Add user
+                    </button>
+                </div>
             </div>
             <div className="col-4 my-3">
                 <input placeholder="search by email" className="form-control" onChange={(e) => handleSearch(e)} />
