@@ -4,7 +4,7 @@ import { fetchListUser } from '../services/UserService';
 import ReactPaginate from 'react-paginate';
 import ModelAddNew from './ModelAddUser';
 import ModelEditUser from './ModelEditUser';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import ModelDeleteConfirm from './ModelDeleteConfirm';
 import './TableUser.scss';
 
@@ -78,6 +78,18 @@ function TableUsers() {
         setListUsers(cloneListUsers);
     };
 
+    const handleSearch = debounce((e) => {
+        let term = e.target.value;
+        console.log(term);
+        if (term) {
+            let cloneListUsers = _.cloneDeep(listUsers);
+            cloneListUsers = cloneListUsers.filter((item) => item.email.includes(term));
+            setListUsers(cloneListUsers);
+        } else {
+            getUsers(1);
+        }
+    }, 2000);
+
     return (
         <div>
             <div className="my-3 d-flex justify-content-between align-items-center">
@@ -87,6 +99,9 @@ function TableUsers() {
                 <button className="btn btn-success" onClick={() => setShowModelAddUser(true)}>
                     Add user
                 </button>
+            </div>
+            <div className="col-4 my-3">
+                <input placeholder="search by email" className="form-control" onChange={(e) => handleSearch(e)} />
             </div>
             <Table striped bordered hover>
                 <thead>
