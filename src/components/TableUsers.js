@@ -5,14 +5,20 @@ import ReactPaginate from 'react-paginate';
 import ModelAddNew from './ModelAddUser';
 import ModelEditUser from './ModelEditUser';
 import _ from 'lodash';
+import ModelDeleteConfirm from './ModelDeleteConfirm';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
     const [totalUsers, setTotalUsers] = useState(0);
-    const [showModelAddUser, setShowModelAddUser] = useState(false);
-    const [showModelEditUser, setShowEditUser] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+
+    const [showModelAddUser, setShowModelAddUser] = useState(false);
+
+    const [showModelEditUser, setShowEditUser] = useState(false);
     const [dataUserEdit, setDataUserEdit] = useState({});
+
+    const [showModelConfirmDelete, setShowModelConfirmDelete] = useState(false);
+    const [dataUserDelete, setDataUserDelete] = useState({});
     useEffect(() => {
         getUsers(1);
     }, []);
@@ -45,6 +51,11 @@ function TableUsers() {
         let index = listUsers.findIndex((item) => item.id === user.id);
         cloneListUsers[index].first_name = user.first_name;
         setListUsers(cloneListUsers);
+    };
+
+    const handleDeleteConfirm = (user) => {
+        setShowModelConfirmDelete(true);
+        setDataUserDelete(user);
     };
 
     return (
@@ -80,7 +91,9 @@ function TableUsers() {
                                         <button className="btn btn-warning me-3" onClick={() => handleUpdateUser(item)}>
                                             Update
                                         </button>
-                                        <button className="btn btn-danger">Delete</button>
+                                        <button className="btn btn-danger" onClick={() => handleDeleteConfirm(item)}>
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             );
@@ -97,6 +110,11 @@ function TableUsers() {
                 handleClose={() => setShowEditUser(false)}
                 data={dataUserEdit}
                 handleEditUserFromModal={handleEditUserFromModal}
+            />
+            <ModelDeleteConfirm
+                show={showModelConfirmDelete}
+                handleClose={() => setShowModelConfirmDelete(false)}
+                data={dataUserDelete}
             />
             <ReactPaginate
                 nextLabel="next >"
