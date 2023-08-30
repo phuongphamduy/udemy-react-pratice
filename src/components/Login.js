@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { loginUser } from '../services/UserService';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 function Login() {
     const navigate = useNavigate();
@@ -9,13 +10,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [loadingApi, setLoadingApi] = useState(false);
-
-    useEffect(() => {
-        let token = localStorage.getItem('token');
-        if (token) {
-            navigate('/');
-        }
-    }, []);
+    const { loginContext } = useContext(UserContext);
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -25,12 +20,16 @@ function Login() {
         setLoadingApi(true);
         let res = await loginUser(email, password);
         if (res && res.token) {
-            localStorage.setItem('token', res.token);
+            loginContext(email, res.token);
             navigate('/');
         } else if (res && res.status === 400) {
             toast.error(res.data.error);
         }
         setLoadingApi(false);
+    };
+
+    const handleGoBack = () => {
+        navigate('/');
     };
 
     return (
@@ -64,7 +63,7 @@ function Login() {
                 >
                     {loadingApi && <i className="fas fa-spinner fa-spin"></i>} &nbsp;Login
                 </button>
-                <div className="text-center mt-3 back">
+                <div className="text-center mt-3 back" onClick={() => handleGoBack()}>
                     <i className="fa-solid fa-angles-left"></i>Go back
                 </div>
             </div>
