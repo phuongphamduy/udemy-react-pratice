@@ -93,7 +93,7 @@ function TableUsers() {
         } else {
             getUsers(1);
         }
-    }, 2000);
+    }, 500);
 
     const handleExportResult = (event, done) => {
         let result = [];
@@ -154,11 +154,11 @@ function TableUsers() {
 
     return (
         <div>
-            <div className="my-3 d-flex justify-content-between align-items-center">
+            <div className="my-3 d-sm-flex justify-content-between align-items-center">
                 <span>
                     <b>List Users:</b>
                 </span>
-                <div>
+                <div className="d-flex">
                     <label htmlFor="inputFile" className="btn btn-warning">
                         <i className="fa-solid fa-file-import"></i> Import
                     </label>
@@ -178,95 +178,106 @@ function TableUsers() {
                     </button>
                 </div>
             </div>
-            <div className="col-4 my-3">
+            <div className="col-12 col-sm-6 col-md-4 my-3">
                 <input placeholder="search by email" className="form-control" onChange={(e) => handleSearch(e)} />
             </div>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>
-                            <div className="sort-header">
-                                <span>Id</span>
-                                <span>
-                                    <i onClick={() => handleSort('asc', 'id')} className="fa-solid fa-arrow-up-z-a"></i>
-                                    <i
-                                        onClick={() => handleSort('desc', 'id')}
-                                        className="fa-solid fa-arrow-down-z-a"
-                                    ></i>
-                                </span>
-                            </div>
-                        </th>
-                        <th>
-                            <div className="sort-header">
-                                <span>Email</span>
-                                <span>
-                                    <i
-                                        onClick={() => handleSort('asc', 'email')}
-                                        className="fa-solid fa-arrow-up-z-a"
-                                    ></i>
-                                    <i
-                                        onClick={() => handleSort('desc', 'email')}
-                                        className="fa-solid fa-arrow-down-z-a"
-                                    ></i>
-                                </span>
-                            </div>
-                        </th>
-                        <th>
-                            <div className="sort-header">
-                                <span>First name</span>
-                                <span>
-                                    <i
-                                        onClick={() => handleSort('asc', 'first_name')}
-                                        className="fa-solid fa-arrow-up-z-a"
-                                    ></i>
-                                    <i
-                                        onClick={() => handleSort('desc', 'first_name')}
-                                        className="fa-solid fa-arrow-down-z-a"
-                                    ></i>
-                                </span>
-                            </div>
-                        </th>
-                        <th>
-                            <div className="sort-header">
-                                <span>Last name</span>
-                                <span>
-                                    <i
-                                        onClick={() => handleSort('asc', 'last_name')}
-                                        className="fa-solid fa-arrow-up-z-a"
-                                    ></i>
-                                    <i
-                                        onClick={() => handleSort('desc', 'last_name')}
-                                        className="fa-solid fa-arrow-down-z-a"
-                                    ></i>
-                                </span>
-                            </div>
-                        </th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listUsers &&
-                        listUsers.length > 0 &&
-                        listUsers.map((item, index) => {
-                            return (
-                                <tr key={`item: ${index}`}>
-                                    <td>{item.id}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.first_name}</td>
-                                    <td>{item.last_name}</td>
-                                    <td>
-                                        <button className="btn btn-warning me-3" onClick={() => handleUpdateUser(item)}>
-                                            Update
-                                        </button>
-                                        <button className="btn btn-danger" onClick={() => handleDeleteConfirm(item)}>
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                </tbody>
-            </Table>
+            <div className="customize-table">
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>
+                                <div className="sort-header">
+                                    <span>Id</span>
+                                    <span>
+                                        <i
+                                            onClick={() => handleSort('asc', 'id')}
+                                            className="fa-solid fa-arrow-up-z-a"
+                                        ></i>
+                                        <i
+                                            onClick={() => handleSort('desc', 'id')}
+                                            className="fa-solid fa-arrow-down-z-a"
+                                        ></i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th>
+                                <div className="sort-header">
+                                    <span>Email</span>
+                                    <span>
+                                        <i
+                                            onClick={() => handleSort('asc', 'email')}
+                                            className="fa-solid fa-arrow-up-z-a"
+                                        ></i>
+                                        <i
+                                            onClick={() => handleSort('desc', 'email')}
+                                            className="fa-solid fa-arrow-down-z-a"
+                                        ></i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th>
+                                <div className="sort-header">
+                                    <span>First name</span>
+                                    <span>
+                                        <i
+                                            onClick={() => handleSort('asc', 'first_name')}
+                                            className="fa-solid fa-arrow-up-z-a"
+                                        ></i>
+                                        <i
+                                            onClick={() => handleSort('desc', 'first_name')}
+                                            className="fa-solid fa-arrow-down-z-a"
+                                        ></i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th>
+                                <div className="sort-header">
+                                    <span>Last name</span>
+                                    <span>
+                                        <i
+                                            onClick={() => handleSort('asc', 'last_name')}
+                                            className="fa-solid fa-arrow-up-z-a"
+                                        ></i>
+                                        <i
+                                            onClick={() => handleSort('desc', 'last_name')}
+                                            className="fa-solid fa-arrow-down-z-a"
+                                        ></i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listUsers &&
+                            listUsers.length > 0 &&
+                            listUsers.map((item, index) => {
+                                return (
+                                    <tr key={`item: ${index}`}>
+                                        <td>{item.id}</td>
+                                        <td>{item.email}</td>
+                                        <td>{item.first_name}</td>
+                                        <td>{item.last_name}</td>
+                                        <td className="d-flex btns-group">
+                                            <button
+                                                className="btn btn-warning me-2"
+                                                onClick={() => handleUpdateUser(item)}
+                                            >
+                                                Update
+                                            </button>
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => handleDeleteConfirm(item)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </Table>
+            </div>
             <ModelAddNew
                 show={showModelAddUser}
                 handleClose={() => setShowModelAddUser(false)}

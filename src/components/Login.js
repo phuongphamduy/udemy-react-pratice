@@ -18,7 +18,7 @@ function Login() {
             return;
         }
         setLoadingApi(true);
-        let res = await loginUser(email, password);
+        let res = await loginUser(email.trim(), password);
         if (res && res.token) {
             loginContext(email, res.token);
             navigate('/');
@@ -30,6 +30,12 @@ function Login() {
 
     const handleGoBack = () => {
         navigate('/');
+    };
+
+    const handleOnKeyDown = (e) => {
+        if (e && e.key === 'Enter') {
+            handleLogin();
+        }
     };
 
     return (
@@ -50,6 +56,7 @@ function Login() {
                         placeholder="Password..."
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => handleOnKeyDown(e)}
                     />
                     <i
                         className={isShowPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}
