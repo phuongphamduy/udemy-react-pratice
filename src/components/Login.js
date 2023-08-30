@@ -1,15 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { loginUser } from '../services/UserService';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isShowPassword, setIsShowPassword] = useState(false);
+    const [loadingApi, setLoadingApi] = useState(false);
+
+    useEffect(() => {
+        let token = localStorage.getItem('token');
+        if (token) {
+            navigate('/');
+        }
+    }, []);
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            toast.error('Email and password is required');
+            return;
+        }
+        setLoadingApi(true);
+        let res = await loginUser(email, password);
+        if (res && res.token) {
+            localStorage.setItem('token', res.token);
+            navigate('/');
+        } else if (res && res.status === 400) {
+            toast.error(res.data.error);
+        }
+        setLoadingApi(false);
+    };
 
     return (
         <>
             <div className="login-container col-12 col-sm-6 col-md-4">
                 <h1 className="title">Login</h1>
-                <div className="text-label">Email or username</div>
+                <div className="text-label">Email or username eve.holt@reqres.in</div>
                 <input
                     className="login-input"
                     placeholder="Email or username"
@@ -32,8 +60,9 @@ function Login() {
                 <button
                     className={email && password ? 'btn active' : 'btn'}
                     disabled={email && password ? false : true}
+                    onClick={() => handleLogin()}
                 >
-                    Login
+                    {loadingApi && <i className="fas fa-spinner fa-spin"></i>} &nbsp;Login
                 </button>
                 <div className="text-center mt-3 back">
                     <i className="fa-solid fa-angles-left"></i>Go back
