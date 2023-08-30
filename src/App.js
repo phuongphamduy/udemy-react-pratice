@@ -1,16 +1,13 @@
 import { Container } from 'react-bootstrap';
 import './App.scss';
 import Header from './components/Header';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import TableUsers from './components/TableUsers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Home from './components/Home';
-import Login from './components/Login';
 import { useContext, useEffect } from 'react';
 import { UserContext } from './context/UserContext';
+import AppRoute from './routes/AppRoute';
 function App() {
-    const { user, loginContext } = useContext(UserContext);
+    const { loginContext } = useContext(UserContext);
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
@@ -20,16 +17,10 @@ function App() {
     return (
         <>
             <div className="app-container">
-                <BrowserRouter>
-                    <Header />
-                    <Container>
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/users" element={<TableUsers />} />
-                            <Route path="/login" element={<Login />} />
-                        </Routes>
-                    </Container>
-                </BrowserRouter>
+                <Header />
+                <Container>
+                    <AppRoute />
+                </Container>
             </div>
             <ToastContainer
                 position="top-right"
