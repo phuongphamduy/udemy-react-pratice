@@ -13,3 +13,66 @@ body {
         margin: auto;
     }
 }
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+
+    .title {
+        text-align: center;
+        font-size: 23px;
+        margin-bottom: 10px;
+    }
+
+    .text-label {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .login-input {
+        padding: 5px;
+        border-radius: 10px;
+        border: none;
+        background-color: #ccc;
+        width: 100%;
+        &:hover {
+            background-color: #999;
+        }
+    }
+
+    .wrap-input-password {
+        margin-top: 10px;
+        position: relative;
+
+        i {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+        }
+    }
+
+    .btn {
+        margin-top: 10px;
+        background-color: aqua;
+        cursor: pointer;
+        &.active {
+            background-color: red;
+            color: white;
+        }
+    }
+
+    button:disabled {
+        cursor: not-allowed;
+    }
+
+    .back {
+        cursor: pointer;
+
+        &:hover {
+            font-weight: 600;
+        }
+    }
+}
