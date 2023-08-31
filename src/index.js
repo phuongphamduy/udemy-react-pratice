@@ -7,13 +7,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { UserProvider } from './context/UserContext';
 import { BrowserRouter } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <UserProvider>
         <React.StrictMode>
             <BrowserRouter>
-                <App />
+                <ErrorBoundary fallback={<p>Something went wrong</p>}>
+                    <App />
+                </ErrorBoundary>
             </BrowserRouter>
         </React.StrictMode>
     </UserProvider>,
